@@ -1,3 +1,4 @@
+import FaqHome from "./components/FaqHome";
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#faf7f0] font-[family-name:var(--font-dm-sans)]">
@@ -136,24 +137,7 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="bg-white px-8 py-14">
-        <p className="text-xs uppercase tracking-widest text-[#b8860b] font-medium mb-2">Preguntas frecuentes</p>
-        <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-[#1a1a1a] mb-8">Lo que más nos preguntan</h2>
-        <div className="divide-y divide-[#f0ede8]">
-          {[
-            "¿Cuál es el mínimo de compra para hacer un pedido?",
-            "¿Hacen envíos a todo el país?",
-            "¿Cómo funciona el grabado láser personalizado?",
-            "¿Puedo ver los precios sin registrarme?",
-            "¿Cuánto tarda en llegar mi pedido?",
-          ].map((q) => (
-            <div key={q} className="py-4 flex justify-between items-center cursor-pointer group">
-              <span className="text-sm text-[#1a1a1a] group-hover:text-[#1a5c38]">{q}</span>
-              <span className="text-[#1a5c38] text-lg ml-4">+</span>
-            </div>
-          ))}
-        </div>
-      </section>
+   <FaqHome />
 
       {/* FOOTER */}
       <footer className="bg-[#1a1a1a] px-8 py-12 grid md:grid-cols-3 gap-8">
