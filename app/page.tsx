@@ -8,8 +8,8 @@ export default function Home() {
           Tienda <span className="text-[#b8860b]">Cuis</span>
         </span>
         <div className="hidden md:flex items-center gap-6 text-sm text-[#6b6b6b]">
-          <a href="#categorias" className="hover:text-[#1a5c38]">Productos</a>
-          <a href="#grabado" className="hover:text-[#1a5c38]">Grabado láser</a>
+          <a href="/catalogo" className="hover:text-[#1a5c38]">Productos</a>
+          <a href="/grabado" className="hover:text-[#1a5c38]">Grabado láser</a>
           <a href="#faq" className="hover:text-[#1a5c38]">Preguntas frecuentes</a>
         </div>
         <div className="flex items-center gap-3">
@@ -37,7 +37,7 @@ export default function Home() {
             Envíos a todo el país.
           </p>
           <div className="flex gap-3 flex-wrap">
-            <a href="#categorias" className="bg-[#d4aa4a] text-[#1a1a1a] text-sm px-5 py-2.5 rounded font-medium hover:bg-[#c49a3a]">
+            <a href="/catalogo" className="bg-[#d4aa4a] text-[#1a1a1a] text-sm px-5 py-2.5 rounded font-medium hover:bg-[#c49a3a]">
               Ver catálogo
             </a>
             <a href="https://wa.me/541123251963" className="border border-white/30 text-white/85 text-sm px-5 py-2.5 rounded hover:bg-white/10">
@@ -84,7 +84,7 @@ export default function Home() {
             { emoji: "🥤", title: "Vasos y Chops", desc: "Aluminio grabado, fernetero, refrigerante. Para armar combos.", count: "+10 productos", href: "/catalogo?categoria=vasos" },
             { emoji: "🎒", title: "Materos y Yerberos", desc: "Latas, canastas eco cuero, porta termos. Complemento ideal.", count: "+8 productos", href: "/catalogo?categoria=complementos" },
             { emoji: "📦", title: "Combos Emprendedores", desc: "Kits con descuento pensados para armar el negocio desde cero.", count: "Oferta", href: "/catalogo?categoria=combos" },
-            { emoji: "⚡", title: "Grabado Láser", desc: "Personalización sobre pedido. Virolas, bombillas, mates y más.", count: "Servicio", href: "/catalogo?categoria=grabados" },
+            { emoji: "⚡", title: "Grabado Láser", desc: "Personalización sobre pedido. Virolas, bombillas, mates y más.", count: "Servicio", href: "/grabado" },
           ].map((cat) => (
             <a key={cat.title} href={cat.href} className="bg-white border border-[#e8e4db] rounded-lg p-5 hover:border-[#b8d4c4] transition-colors relative group">
               <span className="absolute top-3 right-3 text-xs text-[#b8860b] bg-[#fff8e6] px-2 py-0.5 rounded">{cat.count}</span>
@@ -101,16 +101,24 @@ export default function Home() {
       <section id="grabado" className="bg-[#1a5c38] px-8 py-14 grid md:grid-cols-2 gap-8 items-center">
         <div>
           <p className="text-xs uppercase tracking-widest text-[#d4aa4a]/80 font-medium mb-2">Diferencial</p>
-          <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-white mb-3">Grabado láser personalizado</h2>
+          <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-white mb-3">
+            Grabado láser personalizado
+          </h2>
           <p className="text-white/65 text-sm leading-relaxed mb-5">
             Ideal para souvenirs de localidad, regalos corporativos y recuerdos de eventos.
             Pedido mínimo accesible.
           </p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mb-6">
             {["Virolas grabadas", "Bombillas grabadas", "Mates personalizados", "Logo de empresa", "Souvenirs de ciudad"].map((tag) => (
               <span key={tag} className="text-xs border border-white/20 text-white/75 px-3 py-1 rounded">{tag}</span>
             ))}
           </div>
+          <a
+            href="/grabado"
+            className="inline-block bg-[#d4aa4a] text-[#1a1a1a] text-sm px-5 py-2.5 rounded font-medium hover:bg-[#c49a3a]"
+          >
+            Ver servicio de grabado →
+          </a>
         </div>
         <div className="grid grid-cols-2 gap-3">
           {[
@@ -162,14 +170,24 @@ export default function Home() {
         </div>
         <div>
           <h5 className="text-xs text-[#888] uppercase tracking-widest mb-3">Productos</h5>
-          {["Mates", "Bombillas", "Vasos y Chops", "Materos y Yerberos", "Combos emprendedores"].map((item) => (
-            <a key={item} href="#" className="block text-sm text-[#ccc] mb-1 hover:text-white">{item}</a>
+          {[
+            { label: "Mates", href: "/catalogo?categoria=mates" },
+            { label: "Bombillas", href: "/catalogo?categoria=bombillas" },
+            { label: "Vasos y Chops", href: "/catalogo?categoria=vasos" },
+            { label: "Materos y Yerberos", href: "/catalogo?categoria=complementos" },
+            { label: "Combos emprendedores", href: "/catalogo?categoria=combos" },
+          ].map((item) => (
+            <a key={item.label} href={item.href} className="block text-sm text-[#ccc] mb-1 hover:text-white">{item.label}</a>
           ))}
         </div>
         <div>
           <h5 className="text-xs text-[#888] uppercase tracking-widest mb-3">Información</h5>
-          {["Grabado láser", "Preguntas frecuentes", "Registrarse"].map((item) => (
-            <a key={item} href="#" className="block text-sm text-[#ccc] mb-1 hover:text-white">{item}</a>
+          {[
+            { label: "Grabado láser", href: "/grabado" },
+            { label: "Preguntas frecuentes", href: "#faq" },
+            { label: "Ver catálogo", href: "/catalogo" },
+          ].map((item) => (
+            <a key={item.label} href={item.href} className="block text-sm text-[#ccc] mb-1 hover:text-white">{item.label}</a>
           ))}
         </div>
       </footer>

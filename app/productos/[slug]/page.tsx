@@ -14,7 +14,7 @@ type Producto = {
 };
 
 const URL_SHEET =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQR0ivhBLzhQTWPA6BeB-BKrOtD6vCHWksS4vZg_7x_l3CAiiyBx3jKOU9vKPnFH0PjIZA6G4PSFTWS/pub?gid=536049818&single=true&output=csv";
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vSwYgDLYIoWa51tr5CppwEtnF864vXU5su5UpQmae7rcbOc8OLH-26i8WsXXR4LvpbfK9HJYlYDAlfO/pub?gid=1201411934&single=true&output=csv";
 
 function slugify(nombre: string) {
   return nombre
