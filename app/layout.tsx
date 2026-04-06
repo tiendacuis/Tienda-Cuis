@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Playfair_Display, DM_Sans } from "next/font/google";
 import "./globals.css";
+import { CarritoProvider } from "./components/CarritoContext";
+import CarritoDrawer from "./components/CarritoDrawer";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -25,8 +27,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className={`${playfair.variable} ${dmSans.variable} font-sans antialiased`}>
-        {children}
+      <body
+        className={`${playfair.variable} ${dmSans.variable} font-sans antialiased`}
+      >
+        <CarritoProvider>
+          {children}
+          <CarritoDrawer />
+        </CarritoProvider>
       </body>
     </html>
   );
