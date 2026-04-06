@@ -25,6 +25,15 @@ const categorias = [
 const URL_SHEET =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQR0ivhBLzhQTWPA6BeB-BKrOtD6vCHWksS4vZg_7x_l3CAiiyBx3jKOU9vKPnFH0PjIZA6G4PSFTWS/pub?gid=536049818&single=true&output=csv";
 
+function slugify(nombre: string) {
+  return nombre
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
 export default function Catalogo() {
   const [productos, setProductos] = useState<Producto[]>([]);
   const [categoriaActiva, setCategoriaActiva] = useState("todos");
@@ -57,7 +66,9 @@ export default function Catalogo() {
       ? productos
       : productos.filter((p) => p.categoria === categoriaActiva);
 
-  const handleAgregar = (producto: Producto) => {
+  const handleAgregar = (e: React.MouseEvent, producto: Producto) => {
+    e.preventDefault();
+    e.stopPropagation();
     agregar({
       id: producto.id,
       nombre: producto.nombre,
@@ -115,9 +126,10 @@ export default function Catalogo() {
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filtrados.map((producto) => (
-            <div
+            <a
               key={producto.id}
-              className="bg-white border border-[#e8e4db] rounded-lg overflow-hidden hover:border-[#b8d4c4] transition-colors"
+              href={"/productos/" + slugify(producto.nombre)}
+              className="bg-white border border-[#e8e4db] rounded-lg overflow-hidden hover:border-[#b8d4c4] transition-colors block"
             >
               <div className="bg-[#f5f2eb] h-48 flex items-center justify-center">
                 {producto.imagen ? (
@@ -142,7 +154,7 @@ export default function Catalogo() {
                     ${producto.precio.toLocaleString("es-AR")}
                   </span>
                   <button
-                    onClick={() => handleAgregar(producto)}
+                    onClick={(e) => handleAgregar(e, producto)}
                     className={
                       "text-xs px-3 py-1.5 rounded transition-colors " +
                       (agregados[producto.id]
@@ -154,7 +166,7 @@ export default function Catalogo() {
                   </button>
                 </div>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>
