@@ -116,12 +116,12 @@ export default function ProductoPage({
 
       <div className="px-8 pb-16 max-w-4xl mx-auto grid md:grid-cols-2 gap-10">
         {/* IMAGEN */}
-        <div className="bg-white border border-[#e8e4db] rounded-xl flex items-center justify-center h-80 md:h-96">
+        <div className="bg-white border border-[#e8e4db] rounded-xl flex items-center justify-center h-80 md:h-96 overflow-hidden">
           {producto.imagen ? (
             <img
               src={producto.imagen}
               alt={producto.nombre}
-              className="h-full w-full object-cover rounded-xl"
+              className="w-full h-full object-contain p-6"
             />
           ) : (
             <span className="text-7xl">🧉</span>

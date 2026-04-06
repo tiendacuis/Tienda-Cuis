@@ -131,13 +131,13 @@ export default function Catalogo() {
               href={"/productos/" + slugify(producto.nombre)}
               className="bg-white border border-[#e8e4db] rounded-lg overflow-hidden hover:border-[#b8d4c4] transition-colors block"
             >
-              <div className="bg-[#f5f2eb] h-48 flex items-center justify-center">
-                {producto.imagen ? (
-                  <img
-                    src={producto.imagen}
-                    alt={producto.nombre}
-                    className="h-full w-full object-cover"
-                  />
+              <div className="bg-white h-48 flex items-center justify-center overflow-hidden">
+  {producto.imagen ? (
+    <img
+      src={producto.imagen}
+      alt={producto.nombre}
+      className="w-full h-full object-contain p-4"
+    />
                 ) : (
                   <span className="text-4xl">🧉</span>
                 )}
