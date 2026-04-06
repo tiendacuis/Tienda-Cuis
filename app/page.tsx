@@ -79,12 +79,12 @@ export default function Home() {
         <p className="text-sm text-[#6b6b6b] mb-8">Artículos regionales para tiendas, kioscos y emprendedores.</p>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {[
-            { emoji: "🧉", title: "Mates", desc: "Imperiales, camioneros, térmicos, algarrobo, palo santo y más.", count: "+25 productos", href: "https://tiendacuis.com/index.php/product-category/mate/" },
-            { emoji: "🥄", title: "Bombillas", desc: "Pico de loro, chata, estribo, resorte, grabadas. Todos los estilos.", count: "+15 productos", href: "https://tiendacuis.com/index.php/product-category/bombillas/" },
-            { emoji: "🥤", title: "Vasos y Chops", desc: "Aluminio grabado, fernetero, refrigerante. Para armar combos.", count: "+10 productos", href: "https://tiendacuis.com/index.php/product-category/vasos/" },
-            { emoji: "🎒", title: "Materos y Yerberos", desc: "Latas, canastas eco cuero, porta termos. Complemento ideal.", count: "+8 productos", href: "https://tiendacuis.com/index.php/product-category/complementos/" },
-            { emoji: "📦", title: "Combos Emprendedores", desc: "Kits con descuento pensados para armar el negocio desde cero.", count: "Oferta", href: "https://tiendacuis.com/index.php/product-category/combos-emprendedores/" },
-            { emoji: "⚡", title: "Grabado Láser", desc: "Personalización sobre pedido. Virolas, bombillas, mates y más.", count: "Servicio", href: "#grabado" },
+            { emoji: "🧉", title: "Mates", desc: "Imperiales, camioneros, térmicos, algarrobo, palo santo y más.", count: "+25 productos", href: "/catalogo?categoria=mates" },
+            { emoji: "🥄", title: "Bombillas", desc: "Pico de loro, chata, estribo, resorte, grabadas. Todos los estilos.", count: "+15 productos", href: "/catalogo?categoria=bombillas" },
+            { emoji: "🥤", title: "Vasos y Chops", desc: "Aluminio grabado, fernetero, refrigerante. Para armar combos.", count: "+10 productos", href: "/catalogo?categoria=vasos" },
+            { emoji: "🎒", title: "Materos y Yerberos", desc: "Latas, canastas eco cuero, porta termos. Complemento ideal.", count: "+8 productos", href: "/catalogo?categoria=complementos" },
+            { emoji: "📦", title: "Combos Emprendedores", desc: "Kits con descuento pensados para armar el negocio desde cero.", count: "Oferta", href: "/catalogo?categoria=combos" },
+            { emoji: "⚡", title: "Grabado Láser", desc: "Personalización sobre pedido. Virolas, bombillas, mates y más.", count: "Servicio", href: "/catalogo?categoria=grabados" },
           ].map((cat) => (
             <a key={cat.title} href={cat.href} className="bg-white border border-[#e8e4db] rounded-lg p-5 hover:border-[#b8d4c4] transition-colors relative group">
               <span className="absolute top-3 right-3 text-xs text-[#b8860b] bg-[#fff8e6] px-2 py-0.5 rounded">{cat.count}</span>
