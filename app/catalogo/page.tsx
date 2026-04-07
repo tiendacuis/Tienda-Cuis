@@ -21,7 +21,7 @@ const categorias = [
   { slug: "mates", label: "Mates" },
   { slug: "bombillas", label: "Bombillas" },
   { slug: "vasos", label: "Vasos" },
-  { slug: "complementos", label: "Materos y Yerberos" },
+  { slug: "complementos", label: "Materos" },
   { slug: "souvenirs", label: "Souvenirs" },
 ];
 
@@ -88,52 +88,58 @@ export default function Catalogo() {
   return (
     <main className="min-h-screen bg-[#FAF8F5]">
       {/* NAV */}
-      <nav className="bg-white border-b border-[#E8E4DB] px-8 h-14 flex items-center justify-between">
+      <nav className="bg-white border-b border-[#E8E4DB] px-4 md:px-8 h-14 flex items-center justify-between">
         <a href="/">
           <span className="text-sm font-medium text-[#1A1A1A] tracking-[3px] uppercase">Tienda Cuis</span>
         </a>
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-[#6b6b6b] bg-[#F0EDE8] px-3 py-1 rounded-sm tracking-wide">
+        <div className="flex items-center gap-2 md:gap-3">
+          <span className="hidden md:block text-xs text-[#6b6b6b] bg-[#F0EDE8] px-3 py-1 rounded-sm tracking-wide">
             Solo mayorista
           </span>
           <button
             onClick={() => setAbierto(true)}
-            className="bg-[#E8673A] text-white text-xs px-4 py-2 rounded-sm font-medium hover:bg-[#C4522C] transition-colors"
+            className="bg-[#E8673A] text-white text-xs px-3 md:px-4 py-2 rounded-sm font-medium hover:bg-[#C4522C] transition-colors"
           >
             Ver carrito
           </button>
         </div>
       </nav>
 
-      <div className="px-8 py-10">
+      <div className="px-4 md:px-8 py-6 md:py-10">
         <p className="text-xs uppercase tracking-[2.5px] text-[#9BA88D] font-medium mb-2">Catálogo</p>
-        <h1 className="text-3xl font-light text-[#1A1A1A] mb-1 tracking-tight">
+        <h1 className="text-2xl md:text-3xl font-light text-[#1A1A1A] mb-1 tracking-tight">
           Nuestros productos
         </h1>
-        <p className="text-sm text-[#6b6b6b] mb-8 font-light">
+        <p className="text-sm text-[#6b6b6b] mb-6 font-light">
           {filtrados.length} productos disponibles
         </p>
 
-        {/* FILTROS Y ORDEN */}
-        <div className="flex gap-2 flex-wrap items-center mb-8">
-          {categorias.map((cat) => (
-            <button
-              key={cat.slug}
-              onClick={() => setCategoriaActiva(cat.slug)}
-              className={
-                "text-xs px-4 py-2 rounded-sm border transition-colors tracking-wide " +
-                (categoriaActiva === cat.slug
-                  ? "bg-[#2D2B45] text-white border-[#2D2B45]"
-                  : "bg-white text-[#6b6b6b] border-[#E8E4DB] hover:border-[#9BA88D] hover:text-[#1A1A1A]")
-              }
-            >
-              {cat.label}
-            </button>
-          ))}
+        {/* FILTROS */}
+        <div className="mb-4 overflow-x-auto">
+          <div className="flex gap-2 pb-2 min-w-max md:min-w-0 md:flex-wrap">
+            {categorias.map((cat) => (
+              <button
+                key={cat.slug}
+                onClick={() => setCategoriaActiva(cat.slug)}
+                className={
+                  "text-xs px-3 md:px-4 py-2 rounded-sm border transition-colors tracking-wide whitespace-nowrap " +
+                  (categoriaActiva === cat.slug
+                    ? "bg-[#2D2B45] text-white border-[#2D2B45]"
+                    : "bg-white text-[#6b6b6b] border-[#E8E4DB] hover:border-[#9BA88D] hover:text-[#1A1A1A]")
+                }
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ORDEN */}
+        <div className="flex justify-end mb-6">
           <select
             value={orden}
             onChange={(e) => setOrden(e.target.value)}
-            className="text-xs px-4 py-2 rounded-sm border border-[#E8E4DB] bg-white text-[#6b6b6b] ml-auto focus:outline-none focus:border-[#2D2B45] cursor-pointer"
+            className="text-xs px-3 py-2 rounded-sm border border-[#E8E4DB] bg-white text-[#6b6b6b] focus:outline-none focus:border-[#2D2B45] cursor-pointer"
           >
             <option value="default">Ordenar por</option>
             <option value="precio-asc">Menor precio</option>
@@ -143,45 +149,45 @@ export default function Catalogo() {
         </div>
 
         {/* GRILLA */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
           {filtrados.map((producto) => (
             <a
               key={producto.id}
               href={"/productos/" + slugify(producto.nombre)}
               className="bg-white border border-[#E8E4DB] rounded overflow-hidden hover:border-[#9BA88D] transition-colors block group"
             >
-              <div className="bg-white h-48 flex items-center justify-center overflow-hidden border-b border-[#E8E4DB]">
+              <div className="bg-white h-36 md:h-48 flex items-center justify-center overflow-hidden border-b border-[#E8E4DB]">
                 {producto.imagen ? (
                   <img
                     src={producto.imagen}
                     alt={producto.nombre}
-                    className="w-full h-full object-contain p-4"
+                    className="w-full h-full object-contain p-3 md:p-4"
                   />
                 ) : (
                   <span className="text-xs text-[#E8E4DB] font-medium tracking-widest uppercase">TC</span>
                 )}
               </div>
-              <div className="p-4">
+              <div className="p-3 md:p-4">
                 <p className="text-[10px] uppercase tracking-[1.5px] text-[#9BA88D] mb-1">
                   {producto.categoria}
                 </p>
-                <h3 className="text-sm font-medium text-[#1A1A1A] leading-snug mb-3">
+                <h3 className="text-xs md:text-sm font-medium text-[#1A1A1A] leading-snug mb-2 line-clamp-2">
                   {producto.nombre}
                 </h3>
-                <div className="flex items-center justify-between">
-                  <span className="text-base font-medium text-[#2D2B45]">
+                <div className="flex items-center justify-between gap-1">
+                  <span className="text-sm font-medium text-[#2D2B45]">
                     ${producto.precio.toLocaleString("es-AR")}
                   </span>
                   <button
                     onClick={(e) => handleAgregar(e, producto)}
                     className={
-                      "text-xs px-3 py-1.5 rounded-sm transition-colors " +
+                      "text-xs px-2 md:px-3 py-1.5 rounded-sm transition-colors flex-shrink-0 " +
                       (agregados[producto.id]
                         ? "bg-[#F2C4A8] text-[#C4522C] font-medium"
                         : "bg-[#E8673A] text-white hover:bg-[#C4522C]")
                     }
                   >
-                    {agregados[producto.id] ? "Agregado" : "Agregar"}
+                    {agregados[producto.id] ? "✓" : "+"}
                   </button>
                 </div>
               </div>

@@ -76,7 +76,7 @@ export default function Home() {
           <p className="text-xs text-white/40 uppercase tracking-[3px] mb-4">
             Mayorista de artículos regionales
           </p>
-          <h1 className="text-5xl font-light text-white leading-tight mb-5 tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-light text-white leading-tight mb-5 tracking-tight">
             Mayorista de mates y artículos regionales
           </h1>
           <p className="text-white/50 text-sm leading-relaxed mb-8 max-w-md font-light">
@@ -161,17 +161,17 @@ export default function Home() {
                 href={"/productos/" + slugify(producto.nombre)}
                 className="bg-[#FAF8F5] border border-[#E8E4DB] rounded overflow-hidden hover:border-[#9BA88D] transition-colors block group"
               >
-                <div className="bg-white h-48 flex items-center justify-center overflow-hidden border-b border-[#E8E4DB]">
+                <div className="bg-white h-40 md:h-48 flex items-center justify-center overflow-hidden border-b border-[#E8E4DB]">
                   {producto.imagen ? (
-                    <img src={producto.imagen} alt={producto.nombre} className="w-full h-full object-contain p-4" />
+                    <img src={producto.imagen} alt={producto.nombre} className="w-full h-full object-contain p-3" />
                   ) : (
                     <span className="text-xs text-[#E8E4DB] font-medium tracking-widest uppercase">TC</span>
                   )}
                 </div>
-                <div className="p-4">
+                <div className="p-3 md:p-4">
                   <p className="text-[10px] uppercase tracking-[1.5px] text-[#9BA88D] mb-1">{producto.categoria}</p>
-                  <h3 className="text-sm font-medium text-[#1A1A1A] leading-snug mb-2">{producto.nombre}</h3>
-                  <span className="text-base font-medium text-[#2D2B45]">
+                  <h3 className="text-xs md:text-sm font-medium text-[#1A1A1A] leading-snug mb-2">{producto.nombre}</h3>
+                  <span className="text-sm md:text-base font-medium text-[#2D2B45]">
                     ${producto.precio.toLocaleString("es-AR")}
                   </span>
                 </div>
@@ -200,9 +200,11 @@ export default function Home() {
             { num: "05", title: "Combos Emprendedores", desc: "Kits con descuento para armar el negocio desde cero.", count: "Oferta", href: "/catalogo?categoria=combos" },
             { num: "06", title: "Grabado Láser", desc: "Personalización sobre pedido. Virolas, bombillas, mates y más.", count: "Servicio", href: "/grabado" },
           ].map((cat) => (
-            <a key={cat.title} href={cat.href} className="bg-white border border-[#E8E4DB] rounded p-5 hover:border-[#9BA88D] transition-colors relative group">
-              <span className="absolute top-4 right-4 text-xs text-[#6b6b6b] bg-[#F5F2EC] px-2 py-0.5 rounded-sm">{cat.count}</span>
-              <div className="text-4xl font-light text-[#E8E4DB] leading-none mb-3 tracking-tight">{cat.num}</div>
+            <a key={cat.title} href={cat.href} className="bg-white border border-[#E8E4DB] rounded p-4 md:p-5 hover:border-[#9BA88D] transition-colors group">
+              <div className="flex items-start justify-between mb-2">
+                <div className="text-3xl md:text-4xl font-light text-[#E8E4DB] leading-none tracking-tight">{cat.num}</div>
+                <span className="text-xs text-[#6b6b6b] bg-[#F5F2EC] px-2 py-0.5 rounded-sm mt-1">{cat.count}</span>
+              </div>
               <h3 className="text-sm font-medium text-[#1A1A1A] mb-1">{cat.title}</h3>
               <p className="text-xs text-[#6b6b6b] leading-relaxed font-light">{cat.desc}</p>
               <span className="text-xs text-[#E8673A] font-medium mt-3 block">Ver productos →</span>
@@ -228,7 +230,7 @@ export default function Home() {
             Ver servicio de grabado →
           </a>
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 mt-6 md:mt-0">
           {[
             { label: "Tipo de trabajo", value: "Grabado vectorial" },
             { label: "Materiales", value: "Acero · Aluminio · Alpaca" },
