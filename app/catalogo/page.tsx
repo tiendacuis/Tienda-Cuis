@@ -3,6 +3,9 @@
 import { useState, useEffect } from "react";
 import { useCarrito } from "../components/CarritoContext";
 
+const URL_SHEET =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vSwYgDLYIoWa51tr5CppwEtnF864vXU5su5UpQmae7rcbOc8OLH-26i8WsXXR4LvpbfK9HJYlYDAlfO/pub?gid=1201411934&single=true&output=csv";
+
 type Producto = {
   id: string;
   nombre: string;
@@ -22,9 +25,6 @@ const categorias = [
   { slug: "souvenirs", label: "Souvenirs" },
 ];
 
-const URL_SHEET =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vSwYgDLYIoWa51tr5CppwEtnF864vXU5su5UpQmae7rcbOc8OLH-26i8WsXXR4LvpbfK9HJYlYDAlfO/pub?gid=1201411934&single=true&output=csv";
-
 function slugify(nombre: string) {
   return nombre
     .toLowerCase()
@@ -37,10 +37,15 @@ function slugify(nombre: string) {
 export default function Catalogo() {
   const [productos, setProductos] = useState<Producto[]>([]);
   const [categoriaActiva, setCategoriaActiva] = useState("todos");
+  const [orden, setOrden] = useState("default");
   const [agregados, setAgregados] = useState<Record<string, boolean>>({});
   const { agregar, setAbierto } = useCarrito();
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const cat = params.get("categoria");
+    if (cat) setCategoriaActiva(cat);
+
     fetch(URL_SHEET)
       .then((r) => r.text())
       .then((text) => {
@@ -61,38 +66,39 @@ export default function Catalogo() {
       });
   }, []);
 
-  const filtrados =
+  const filtrados = (
     categoriaActiva === "todos"
       ? productos
-      : productos.filter((p) => p.categoria === categoriaActiva);
+      : productos.filter((p) => p.categoria === categoriaActiva)
+  ).sort((a, b) => {
+    if (orden === "precio-asc") return a.precio - b.precio;
+    if (orden === "precio-desc") return b.precio - a.precio;
+    if (orden === "nombre") return a.nombre.localeCompare(b.nombre);
+    return 0;
+  });
 
   const handleAgregar = (e: React.MouseEvent, producto: Producto) => {
     e.preventDefault();
     e.stopPropagation();
-    agregar({
-      id: producto.id,
-      nombre: producto.nombre,
-      precio: producto.precio,
-    });
+    agregar({ id: producto.id, nombre: producto.nombre, precio: producto.precio });
     setAgregados((prev) => ({ ...prev, [producto.id]: true }));
-    setTimeout(() => {
-      setAgregados((prev) => ({ ...prev, [producto.id]: false }));
-    }, 1500);
+    setTimeout(() => setAgregados((prev) => ({ ...prev, [producto.id]: false })), 1500);
   };
 
   return (
-    <main className="min-h-screen bg-[#faf7f0]">
-      <nav className="bg-white border-b border-[#e8e4db] px-8 h-14 flex items-center justify-between">
-        <a href="/" className="font-[family-name:var(--font-playfair)] text-xl font-bold text-[#1a5c38]">
-          Tienda <span className="text-[#b8860b]">Cuis</span>
+    <main className="min-h-screen bg-[#FAF8F5]">
+      {/* NAV */}
+      <nav className="bg-white border-b border-[#E8E4DB] px-8 h-14 flex items-center justify-between">
+        <a href="/">
+          <span className="text-sm font-medium text-[#1A1A1A] tracking-[3px] uppercase">Tienda Cuis</span>
         </a>
         <div className="flex items-center gap-3">
-          <span className="text-xs text-[#b8860b] bg-[#fff8e6] border border-[#e8d48a] px-2 py-1 rounded">
+          <span className="text-xs text-[#6b6b6b] bg-[#F0EDE8] px-3 py-1 rounded-sm tracking-wide">
             Solo mayorista
           </span>
           <button
             onClick={() => setAbierto(true)}
-            className="bg-[#1a5c38] text-white text-xs px-4 py-2 rounded font-medium hover:bg-[#154d30]"
+            className="bg-[#E8673A] text-white text-xs px-4 py-2 rounded-sm font-medium hover:bg-[#C4522C] transition-colors"
           >
             Ver carrito
           </button>
@@ -100,69 +106,82 @@ export default function Catalogo() {
       </nav>
 
       <div className="px-8 py-10">
-        <h1 className="font-[family-name:var(--font-playfair)] text-3xl font-bold text-[#1a1a1a] mb-2">
+        <p className="text-xs uppercase tracking-[2.5px] text-[#9BA88D] font-medium mb-2">Catálogo</p>
+        <h1 className="text-3xl font-light text-[#1A1A1A] mb-1 tracking-tight">
           Nuestros productos
         </h1>
-        <p className="text-sm text-[#6b6b6b] mb-8">
+        <p className="text-sm text-[#6b6b6b] mb-8 font-light">
           {filtrados.length} productos disponibles
         </p>
 
-        <div className="flex gap-2 flex-wrap mb-8">
+        {/* FILTROS Y ORDEN */}
+        <div className="flex gap-2 flex-wrap items-center mb-8">
           {categorias.map((cat) => (
             <button
               key={cat.slug}
               onClick={() => setCategoriaActiva(cat.slug)}
               className={
-                "text-xs px-4 py-2 rounded-full border transition-colors " +
+                "text-xs px-4 py-2 rounded-sm border transition-colors tracking-wide " +
                 (categoriaActiva === cat.slug
-                  ? "bg-[#1a5c38] text-white border-[#1a5c38]"
-                  : "bg-white text-[#6b6b6b] border-[#e8e4db] hover:border-[#1a5c38] hover:text-[#1a5c38]")
+                  ? "bg-[#2D2B45] text-white border-[#2D2B45]"
+                  : "bg-white text-[#6b6b6b] border-[#E8E4DB] hover:border-[#9BA88D] hover:text-[#1A1A1A]")
               }
             >
               {cat.label}
             </button>
           ))}
+          <select
+            value={orden}
+            onChange={(e) => setOrden(e.target.value)}
+            className="text-xs px-4 py-2 rounded-sm border border-[#E8E4DB] bg-white text-[#6b6b6b] ml-auto focus:outline-none focus:border-[#2D2B45] cursor-pointer"
+          >
+            <option value="default">Ordenar por</option>
+            <option value="precio-asc">Menor precio</option>
+            <option value="precio-desc">Mayor precio</option>
+            <option value="nombre">Nombre A-Z</option>
+          </select>
         </div>
 
+        {/* GRILLA */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filtrados.map((producto) => (
             <a
               key={producto.id}
               href={"/productos/" + slugify(producto.nombre)}
-              className="bg-white border border-[#e8e4db] rounded-lg overflow-hidden hover:border-[#b8d4c4] transition-colors block"
+              className="bg-white border border-[#E8E4DB] rounded overflow-hidden hover:border-[#9BA88D] transition-colors block group"
             >
-              <div className="bg-white h-48 flex items-center justify-center overflow-hidden">
-  {producto.imagen ? (
-    <img
-      src={producto.imagen}
-      alt={producto.nombre}
-      className="w-full h-full object-contain p-4"
-    />
+              <div className="bg-white h-48 flex items-center justify-center overflow-hidden border-b border-[#E8E4DB]">
+                {producto.imagen ? (
+                  <img
+                    src={producto.imagen}
+                    alt={producto.nombre}
+                    className="w-full h-full object-contain p-4"
+                  />
                 ) : (
-                  <span className="text-4xl">🧉</span>
+                  <span className="text-xs text-[#E8E4DB] font-medium tracking-widest uppercase">TC</span>
                 )}
               </div>
               <div className="p-4">
-                <p className="text-xs text-[#6b6b6b] capitalize mb-1">
+                <p className="text-[10px] uppercase tracking-[1.5px] text-[#9BA88D] mb-1">
                   {producto.categoria}
                 </p>
-                <h3 className="text-sm font-medium text-[#1a1a1a] leading-snug mb-3">
+                <h3 className="text-sm font-medium text-[#1A1A1A] leading-snug mb-3">
                   {producto.nombre}
                 </h3>
                 <div className="flex items-center justify-between">
-                  <span className="text-base font-bold text-[#1a5c38]">
+                  <span className="text-base font-medium text-[#2D2B45]">
                     ${producto.precio.toLocaleString("es-AR")}
                   </span>
                   <button
                     onClick={(e) => handleAgregar(e, producto)}
                     className={
-                      "text-xs px-3 py-1.5 rounded transition-colors " +
+                      "text-xs px-3 py-1.5 rounded-sm transition-colors " +
                       (agregados[producto.id]
-                        ? "bg-[#e8f2ec] text-[#1a5c38] font-medium"
-                        : "bg-[#1a5c38] text-white hover:bg-[#154d30]")
+                        ? "bg-[#F2C4A8] text-[#C4522C] font-medium"
+                        : "bg-[#E8673A] text-white hover:bg-[#C4522C]")
                     }
                   >
-                    {agregados[producto.id] ? "Agregado!" : "Agregar"}
+                    {agregados[producto.id] ? "Agregado" : "Agregar"}
                   </button>
                 </div>
               </div>
