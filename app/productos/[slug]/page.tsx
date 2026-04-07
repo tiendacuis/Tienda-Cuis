@@ -49,7 +49,7 @@ export default function ProductoPage({ params }: { params: Promise<{ slug: strin
   const handleAgregar = () => {
     if (!producto) return;
     for (let i = 0; i < cantidad; i++) {
-      agregar({ id: producto.id, nombre: producto.nombre, precio: producto.precio });
+      agregar({ id: producto.id, nombre: producto.nombre, precio: producto.precio, imagen: producto.imagen });
     }
     setAgregado(true);
     setTimeout(() => setAgregado(false), 2000);
@@ -79,7 +79,7 @@ export default function ProductoPage({ params }: { params: Promise<{ slug: strin
       {/* NAV */}
       <nav className="bg-white border-b border-[#E8E4DB] px-8 h-14 flex items-center justify-between">
         <a href="/">
-          <img src={LOGO_NEGRO} alt="Tienda Cuis" className="h-8 w-auto object-contain" />
+          <span className="text-sm font-medium text-[#1A1A1A] tracking-[3px] uppercase">Tienda Cuis</span>
         </a>
         <div className="flex items-center gap-3">
           <span className="text-xs text-[#6b6b6b] bg-[#F0EDE8] px-3 py-1 rounded-sm tracking-wide">Solo mayorista</span>

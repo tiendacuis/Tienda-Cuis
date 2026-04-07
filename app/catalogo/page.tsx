@@ -80,14 +80,13 @@ export default function Catalogo() {
   const handleAgregar = (e: React.MouseEvent, producto: Producto) => {
     e.preventDefault();
     e.stopPropagation();
-    agregar({ id: producto.id, nombre: producto.nombre, precio: producto.precio });
+    agregar({ id: producto.id, nombre: producto.nombre, precio: producto.precio, imagen: producto.imagen });
     setAgregados((prev) => ({ ...prev, [producto.id]: true }));
     setTimeout(() => setAgregados((prev) => ({ ...prev, [producto.id]: false })), 1500);
   };
 
   return (
     <main className="min-h-screen bg-[#FAF8F5]">
-      {/* NAV */}
       <nav className="bg-white border-b border-[#E8E4DB] px-4 md:px-8 h-14 flex items-center justify-between">
         <a href="/">
           <span className="text-sm font-medium text-[#1A1A1A] tracking-[3px] uppercase">Tienda Cuis</span>
@@ -107,14 +106,9 @@ export default function Catalogo() {
 
       <div className="px-4 md:px-8 py-6 md:py-10">
         <p className="text-xs uppercase tracking-[2.5px] text-[#9BA88D] font-medium mb-2">Catálogo</p>
-        <h1 className="text-2xl md:text-3xl font-light text-[#1A1A1A] mb-1 tracking-tight">
-          Nuestros productos
-        </h1>
-        <p className="text-sm text-[#6b6b6b] mb-6 font-light">
-          {filtrados.length} productos disponibles
-        </p>
+        <h1 className="text-2xl md:text-3xl font-light text-[#1A1A1A] mb-1 tracking-tight">Nuestros productos</h1>
+        <p className="text-sm text-[#6b6b6b] mb-6 font-light">{filtrados.length} productos disponibles</p>
 
-        {/* FILTROS */}
         <div className="mb-4 overflow-x-auto">
           <div className="flex gap-2 pb-2 min-w-max md:min-w-0 md:flex-wrap">
             {categorias.map((cat) => (
@@ -134,7 +128,6 @@ export default function Catalogo() {
           </div>
         </div>
 
-        {/* ORDEN */}
         <div className="flex justify-end mb-6">
           <select
             value={orden}
@@ -148,7 +141,6 @@ export default function Catalogo() {
           </select>
         </div>
 
-        {/* GRILLA */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
           {filtrados.map((producto) => (
             <a
@@ -158,26 +150,16 @@ export default function Catalogo() {
             >
               <div className="bg-white h-36 md:h-48 flex items-center justify-center overflow-hidden border-b border-[#E8E4DB]">
                 {producto.imagen ? (
-                  <img
-                    src={producto.imagen}
-                    alt={producto.nombre}
-                    className="w-full h-full object-contain p-3 md:p-4"
-                  />
+                  <img src={producto.imagen} alt={producto.nombre} className="w-full h-full object-contain p-3 md:p-4" />
                 ) : (
                   <span className="text-xs text-[#E8E4DB] font-medium tracking-widest uppercase">TC</span>
                 )}
               </div>
               <div className="p-3 md:p-4">
-                <p className="text-[10px] uppercase tracking-[1.5px] text-[#9BA88D] mb-1">
-                  {producto.categoria}
-                </p>
-                <h3 className="text-xs md:text-sm font-medium text-[#1A1A1A] leading-snug mb-2 line-clamp-2">
-                  {producto.nombre}
-                </h3>
+                <p className="text-[10px] uppercase tracking-[1.5px] text-[#9BA88D] mb-1">{producto.categoria}</p>
+                <h3 className="text-xs md:text-sm font-medium text-[#1A1A1A] leading-snug mb-2 line-clamp-2">{producto.nombre}</h3>
                 <div className="flex items-center justify-between gap-1">
-                  <span className="text-sm font-medium text-[#2D2B45]">
-                    ${producto.precio.toLocaleString("es-AR")}
-                  </span>
+                  <span className="text-sm font-medium text-[#2D2B45]">${producto.precio.toLocaleString("es-AR")}</span>
                   <button
                     onClick={(e) => handleAgregar(e, producto)}
                     className={
@@ -187,7 +169,7 @@ export default function Catalogo() {
                         : "bg-[#E8673A] text-white hover:bg-[#C4522C]")
                     }
                   >
-                    {agregados[producto.id] ? "✓" : "+"}
+                    {agregados[producto.id] ? "✓" : "Agregar"}
                   </button>
                 </div>
               </div>

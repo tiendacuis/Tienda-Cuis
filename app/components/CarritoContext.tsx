@@ -13,11 +13,12 @@ export type ItemCarrito = {
   nombre: string;
   precio: number;
   cantidad: number;
+  imagen?: string;
 };
 
 type CarritoContextType = {
   items: ItemCarrito[];
-  agregar: (producto: { id: string; nombre: string; precio: number }) => void;
+  agregar: (producto: { id: string; nombre: string; precio: number; imagen?: string }) => void;
   quitar: (id: string) => void;
   actualizar: (id: string, cantidad: number) => void;
   vaciar: () => void;
@@ -28,7 +29,6 @@ type CarritoContextType = {
 };
 
 const CarritoContext = createContext<CarritoContextType | null>(null);
-
 const STORAGE_KEY = "tiendacuis_carrito";
 
 export function CarritoProvider({ children }: { children: ReactNode }) {
@@ -39,12 +39,8 @@ export function CarritoProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const guardado = localStorage.getItem(STORAGE_KEY);
-      if (guardado) {
-        setItems(JSON.parse(guardado));
-      }
-    } catch {
-      // ignorar errores de localStorage
-    }
+      if (guardado) setItems(JSON.parse(guardado));
+    } catch {}
     setCargado(true);
   }, []);
 
@@ -52,16 +48,10 @@ export function CarritoProvider({ children }: { children: ReactNode }) {
     if (!cargado) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    } catch {
-      // ignorar errores de localStorage
-    }
+    } catch {}
   }, [items, cargado]);
 
-  const agregar = (producto: {
-    id: string;
-    nombre: string;
-    precio: number;
-  }) => {
+  const agregar = (producto: { id: string; nombre: string; precio: number; imagen?: string }) => {
     setItems((prev) => {
       const existe = prev.find((i) => i.id === producto.id);
       if (existe) {
@@ -74,46 +64,23 @@ export function CarritoProvider({ children }: { children: ReactNode }) {
     setAbierto(true);
   };
 
-  const quitar = (id: string) => {
-    setItems((prev) => prev.filter((i) => i.id !== id));
-  };
+  const quitar = (id: string) => setItems((prev) => prev.filter((i) => i.id !== id));
 
   const actualizar = (id: string, cantidad: number) => {
-    if (cantidad <= 0) {
-      quitar(id);
-      return;
-    }
-    setItems((prev) =>
-      prev.map((i) => (i.id === id ? { ...i, cantidad } : i))
-    );
+    if (cantidad <= 0) { quitar(id); return; }
+    setItems((prev) => prev.map((i) => (i.id === id ? { ...i, cantidad } : i)));
   };
 
   const vaciar = () => {
     setItems([]);
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch {
-      // ignorar
-    }
+    try { localStorage.removeItem(STORAGE_KEY); } catch {}
   };
 
   const total = items.reduce((acc, i) => acc + i.precio * i.cantidad, 0);
   const cantidad = items.reduce((acc, i) => acc + i.cantidad, 0);
 
   return (
-    <CarritoContext.Provider
-      value={{
-        items,
-        agregar,
-        quitar,
-        actualizar,
-        vaciar,
-        total,
-        cantidad,
-        abierto,
-        setAbierto,
-      }}
-    >
+    <CarritoContext.Provider value={{ items, agregar, quitar, actualizar, vaciar, total, cantidad, abierto, setAbierto }}>
       {children}
     </CarritoContext.Provider>
   );
