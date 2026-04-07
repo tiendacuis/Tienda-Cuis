@@ -67,7 +67,6 @@ export default function Home() {
           <span className="text-xs text-[#6b6b6b] bg-[#F0EDE8] px-3 py-1 rounded-sm tracking-wide">
             Solo mayorista
           </span>
-          
         </div>
       </nav>
 
@@ -95,9 +94,9 @@ export default function Home() {
         </div>
         <div className="hidden md:flex flex-col gap-3">
           {[
-            { label: "Bajo Mínimo de compra", value: "Con $80.000 accedes a todos nuestros productos" },
-            { label: "Stock Permanente", value: "Envíos por Correo Argentino y Via Cargo" },
-            { label: "Personalización", value: "Grabado láser de bombillas, mates y termos" },
+            { label: "Bajo Mínimo de compra", value: "Comprá desde $80.000 y accedé a precios mayoristas reales" },
+            { label: "Stock listo para vender sin esperar", value: "Envíos por Correo Argentino y Via Cargo" },
+            { label: "Personalizá y diferenciá tu negocio", value: "Grabado láser de bombillas, mates y termos" },
           ].map((item) => (
             <div key={item.label} className="bg-white/5 border border-white/10 rounded px-4 py-3">
               <p className="text-white/40 text-xs mb-1">{item.label}</p>
@@ -116,7 +115,8 @@ export default function Home() {
           </div>
         ))}
       </div>
-     {/* DESCUENTOS POR VOLUMEN */}
+
+      {/* DESCUENTOS POR VOLUMEN */}
       <section className="bg-[#2D2B45] px-8 py-8">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-xs uppercase tracking-[2.5px] text-white/40 font-medium mb-2">Beneficios mayoristas</p>
@@ -130,18 +130,24 @@ export default function Home() {
               { rango: "$1.000.000 – $2.000.000", descuento: "10% de descuento", color: "bg-[#E8673A]/30" },
               { rango: "Más de $2.000.000", descuento: "12,5% de descuento", color: "bg-[#E8673A]/40" },
             ].map((item) => (
-              <div key={item.rango} className={`${item.color} border border-white/10 rounded p-3 text-center`}>
+              <div key={item.rango} className={item.color + " border border-white/10 rounded p-3 text-center"}>
                 <p className="text-xs text-white/50 font-light mb-1">{item.rango}</p>
                 <p className="text-sm font-medium text-white">{item.descuento}</p>
               </div>
             ))}
           </div>
           <p className="text-xs text-white/35 mt-4 font-light">
-            El descuento se aplica automáticamente al armar tu carrito.
+            Cuanto más comprás, mayor es tu ganancia.
           </p>
+          <a
+            href="/catalogo"
+            className="inline-block mt-5 text-sm text-white/70 border-b border-white/20 hover:text-white hover:border-white/50 transition-colors pb-0.5"
+          >
+            Empezá a armar tu pedido y desbloqueá los descuentos →
+          </a>
         </div>
       </section>
-      
+
       {/* MÁS VENDIDOS */}
       {destacados.length > 0 && (
         <section className="px-8 py-14 bg-white">
