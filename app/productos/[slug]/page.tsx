@@ -19,7 +19,13 @@ const URL_SHEET =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSwYgDLYIoWa51tr5CppwEtnF864vXU5su5UpQmae7rcbOc8OLH-26i8WsXXR4LvpbfK9HJYlYDAlfO/pub?gid=1201411934&single=true&output=csv";
 
 function slugify(nombre: string) {
-  return nombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  if (!nombre) return "";
+  return nombre
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
 }
 
 export default function ProductoPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -39,7 +45,7 @@ export default function ProductoPage({ params }: { params: Promise<{ slug: strin
         const cols = row.split(",");
         return { id: cols[0], nombre: cols[1], precio: Number(cols[2]), categoria: cols[3], descripcion: cols[4], imagen: cols[5], activo: cols[6]?.trim() === "TRUE" };
       });
-      const encontrado = productos.find((p) => slugify(p.nombre) === slug);
+      const encontrado = productos.find((p) => p.activo && slugify(p.nombre) === slug);
       setProducto(encontrado || null);
       setCargando(false);
     };
