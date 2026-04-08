@@ -23,6 +23,14 @@ function getProximoTramo(total: number) {
   return TRAMOS.find((t) => t.desde > total) || null;
 }
 
+function dispararConversion() {
+  if (typeof window !== "undefined" && typeof (window as any).gtag === "function") {
+    (window as any).gtag("event", "ads_conversion_Tramitaci_n_de_la_compr_1", {
+      event_timeout: 2000,
+    });
+  }
+}
+
 function BarraProgreso({ total }: { total: number }) {
   if (total === 0) return null;
   const llegaAlMinimo = total >= MINIMO;
@@ -99,6 +107,7 @@ export default function CarritoDrawer() {
       ? `\nDescuento aplicado (${descuento}%): -$${ahorro.toLocaleString("es-AR")}\nTotal con descuento: $${totalConDescuento.toLocaleString("es-AR")}`
       : "";
     const mensaje = `Hola! Quiero hacer un pedido mayorista:\n\n${lineas}\n\nSubtotal: $${total.toLocaleString("es-AR")}${descuentoTexto}`;
+    dispararConversion();
     window.open("https://wa.me/541123251963?text=" + encodeURIComponent(mensaje), "_blank");
   };
 
@@ -115,6 +124,7 @@ export default function CarritoDrawer() {
         detalle: detalle + descuentoTexto,
         total: "$" + totalConDescuento.toLocaleString("es-AR"),
       }, "hbpfSCzPkpZo0KttM");
+      dispararConversion();
       setVista("confirmado");
       vaciar();
     } catch {

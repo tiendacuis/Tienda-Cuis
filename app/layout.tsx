@@ -39,6 +39,19 @@ export default function RootLayout({
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               gtag('config', 'AW-10794736685');
+
+              function gtagSendEvent(url) {
+                var callback = function () {
+                  if (typeof url === 'string') {
+                    window.location = url;
+                  }
+                };
+                gtag('event', 'ads_conversion_Tramitaci_n_de_la_compr_1', {
+                  'event_callback': callback,
+                  'event_timeout': 2000,
+                });
+                return false;
+              }
             `,
           }}
         />
