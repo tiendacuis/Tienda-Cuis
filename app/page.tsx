@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import FaqHome from "./components/FaqHome";
+import { Analytics } from "@vercel/analytics/next";
 
 const URL_SHEET =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSwYgDLYIoWa51tr5CppwEtnF864vXU5su5UpQmae7rcbOc8OLH-26i8WsXXR4LvpbfK9HJYlYDAlfO/pub?gid=1201411934&single=true&output=csv";

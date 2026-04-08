@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useCarrito } from "../../components/CarritoContext";
+import { Analytics } from "@vercel/analytics/next";
 
 const LOGO_NEGRO = "https://tiendacuis.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-06-at-6.57.16-PM.jpeg";
 

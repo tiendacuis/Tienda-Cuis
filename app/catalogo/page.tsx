@@ -246,7 +246,7 @@ export default function Catalogo() {
                         : "bg-[#E8673A] text-white hover:bg-[#C4522C]")
                     }
                   >
-                    {agregados[producto.id] ? "✓" : "🛒"}
+                    {agregados[producto.id] ? "✓" : "Agregar"}
                   </button>
                 </div>
               </div>
