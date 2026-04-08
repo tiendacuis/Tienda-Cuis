@@ -26,6 +26,7 @@ const categorias = [
 ];
 
 function slugify(nombre: string) {
+  if (!nombre) return "";
   return nombre
     .toLowerCase()
     .normalize("NFD")
@@ -38,6 +39,7 @@ export default function Catalogo() {
   const [productos, setProductos] = useState<Producto[]>([]);
   const [categoriaActiva, setCategoriaActiva] = useState("todos");
   const [orden, setOrden] = useState("default");
+  const [busqueda, setBusqueda] = useState("");
   const [agregados, setAgregados] = useState<Record<string, boolean>>({});
   const { agregar, setAbierto } = useCarrito();
 
@@ -62,20 +64,24 @@ export default function Catalogo() {
             activo: cols[6]?.trim() === "TRUE",
           };
         });
-        setProductos(data.filter((p) => p.activo));
+        setProductos(data.filter((p) => p.activo && p.nombre));
       });
   }, []);
 
-  const filtrados = (
-    categoriaActiva === "todos"
-      ? productos
-      : productos.filter((p) => p.categoria === categoriaActiva)
-  ).sort((a, b) => {
-    if (orden === "precio-asc") return a.precio - b.precio;
-    if (orden === "precio-desc") return b.precio - a.precio;
-    if (orden === "nombre") return a.nombre.localeCompare(b.nombre);
-    return 0;
-  });
+  const filtrados = productos
+    .filter((p) => categoriaActiva === "todos" || p.categoria === categoriaActiva)
+    .filter((p) => {
+      if (!busqueda.trim()) return true;
+      const q = busqueda.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const nombre = p.nombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      return nombre.includes(q);
+    })
+    .sort((a, b) => {
+      if (orden === "precio-asc") return a.precio - b.precio;
+      if (orden === "precio-desc") return b.precio - a.precio;
+      if (orden === "nombre") return a.nombre.localeCompare(b.nombre);
+      return 0;
+    });
 
   const handleAgregar = (e: React.MouseEvent, producto: Producto) => {
     e.preventDefault();
@@ -109,38 +115,109 @@ export default function Catalogo() {
         <h1 className="text-2xl md:text-3xl font-light text-[#1A1A1A] mb-1 tracking-tight">Nuestros productos</h1>
         <p className="text-sm text-[#6b6b6b] mb-6 font-light">{filtrados.length} productos disponibles</p>
 
-        <div className="mb-4 overflow-x-auto">
-          <div className="flex gap-2 pb-2 min-w-max md:min-w-0 md:flex-wrap">
+        {/* DESKTOP: todo en una línea */}
+        <div className="hidden md:flex items-center gap-2 mb-8">
+          <div className="flex gap-2 flex-shrink-0">
             {categorias.map((cat) => (
               <button
                 key={cat.slug}
                 onClick={() => setCategoriaActiva(cat.slug)}
                 className={
-                  "text-xs px-3 md:px-4 py-2 rounded-sm border transition-colors tracking-wide whitespace-nowrap " +
+                  "text-xs px-3 py-2 rounded-sm border transition-colors whitespace-nowrap " +
                   (categoriaActiva === cat.slug
                     ? "bg-[#2D2B45] text-white border-[#2D2B45]"
-                    : "bg-white text-[#6b6b6b] border-[#E8E4DB] hover:border-[#9BA88D] hover:text-[#1A1A1A]")
+                    : "bg-white text-[#6b6b6b] border-[#E8E4DB] hover:border-[#9BA88D]")
                 }
               >
                 {cat.label}
               </button>
             ))}
           </div>
-        </div>
-
-        <div className="flex justify-end mb-6">
+          <div className="relative flex-1 min-w-0">
+            <input
+              type="text"
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+              placeholder="Buscar productos..."
+              className="w-full border border-[#E8E4DB] rounded-sm pl-7 pr-6 py-2 text-xs text-[#1A1A1A] focus:outline-none focus:border-[#2D2B45] bg-white"
+            />
+            <span className="absolute left-2 top-1/2 -translate-y-1/2 text-[#9BA88D] text-xs">🔍</span>
+            {busqueda && (
+              <button onClick={() => setBusqueda("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-[#9BA88D] hover:text-[#1A1A1A] text-xs">✕</button>
+            )}
+          </div>
           <select
             value={orden}
             onChange={(e) => setOrden(e.target.value)}
-            className="text-xs px-3 py-2 rounded-sm border border-[#E8E4DB] bg-white text-[#6b6b6b] focus:outline-none focus:border-[#2D2B45] cursor-pointer"
+            className="text-xs px-2 py-2 rounded-sm border border-[#E8E4DB] bg-white text-[#6b6b6b] focus:outline-none focus:border-[#2D2B45] cursor-pointer flex-shrink-0"
           >
-            <option value="default">Ordenar por</option>
+            <option value="default">Ordenar</option>
             <option value="precio-asc">Menor precio</option>
             <option value="precio-desc">Mayor precio</option>
-            <option value="nombre">Nombre A-Z</option>
+            <option value="nombre">A-Z</option>
           </select>
         </div>
 
+        {/* MOBILE: categorías arriba, buscador + orden abajo */}
+        <div className="md:hidden mb-6">
+          {/* Fila 1: categorías con scroll */}
+          <div className="overflow-x-auto mb-3">
+            <div className="flex gap-2 pb-1 min-w-max">
+              {categorias.map((cat) => (
+                <button
+                  key={cat.slug}
+                  onClick={() => setCategoriaActiva(cat.slug)}
+                  className={
+                    "text-xs px-3 py-2 rounded-sm border transition-colors whitespace-nowrap " +
+                    (categoriaActiva === cat.slug
+                      ? "bg-[#2D2B45] text-white border-[#2D2B45]"
+                      : "bg-white text-[#6b6b6b] border-[#E8E4DB]")
+                  }
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          {/* Fila 2: buscador + orden */}
+          <div className="flex gap-2 items-center">
+            <div className="relative flex-1">
+              <input
+                type="text"
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+                placeholder="Buscar..."
+                className="w-full border border-[#E8E4DB] rounded-sm pl-7 pr-6 py-2 text-xs text-[#1A1A1A] focus:outline-none focus:border-[#2D2B45] bg-white"
+              />
+              <span className="absolute left-2 top-1/2 -translate-y-1/2 text-[#9BA88D] text-xs">🔍</span>
+              {busqueda && (
+                <button onClick={() => setBusqueda("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-[#9BA88D] text-xs">✕</button>
+              )}
+            </div>
+            <select
+              value={orden}
+              onChange={(e) => setOrden(e.target.value)}
+              className="text-xs px-2 py-2 rounded-sm border border-[#E8E4DB] bg-white text-[#6b6b6b] focus:outline-none cursor-pointer flex-shrink-0"
+            >
+              <option value="default">Ordenar</option>
+              <option value="precio-asc">Menor precio</option>
+              <option value="precio-desc">Mayor precio</option>
+              <option value="nombre">A-Z</option>
+            </select>
+          </div>
+        </div>
+
+        {/* SIN RESULTADOS */}
+        {filtrados.length === 0 && (
+          <div className="text-center py-16">
+            <p className="text-sm text-[#6b6b6b] font-light mb-2">No encontramos productos para "{busqueda}"</p>
+            <button onClick={() => { setBusqueda(""); setCategoriaActiva("todos"); }} className="text-xs text-[#E8673A] font-medium hover:underline">
+              Ver todos los productos →
+            </button>
+          </div>
+        )}
+
+        {/* GRILLA */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
           {filtrados.map((producto) => (
             <a
@@ -169,7 +246,7 @@ export default function Catalogo() {
                         : "bg-[#E8673A] text-white hover:bg-[#C4522C]")
                     }
                   >
-                    {agregados[producto.id] ? "✓" : "Agregar"}
+                    {agregados[producto.id] ? "✓" : "🛒"}
                   </button>
                 </div>
               </div>
