@@ -24,12 +24,12 @@ const productos = [
 ];
 
 const fotos = [
-  "https://tiendacuis.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-06-at-4.05.10-PM.jpeg",
-  "https://tiendacuis.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-06-at-4.05.09-PM.jpeg",
-  "https://tiendacuis.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-06-at-4.06.24-PM.jpeg",
-  "https://tiendacuis.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-06-at-4.10.14-PM.jpeg",
-  "https://tiendacuis.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-06-at-4.09.46-PM.jpeg",
-  "https://tiendacuis.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-06-at-4.11.29-PM.jpeg",
+  "https://res.cloudinary.com/dvgrg8asq/image/upload/v1775609394/WhatsApp-Image-2026-04-06-at-4.10.14-PM_vdxqwj.jpg",
+  "https://res.cloudinary.com/dvgrg8asq/image/upload/v1775609396/WhatsApp-Image-2026-04-06-at-4.11.29-PM_v7dwaq.jpg",
+  "https://res.cloudinary.com/dvgrg8asq/image/upload/v1775609393/WhatsApp-Image-2026-04-06-at-4.09.46-PM_kwpfpd.jpg",
+  "https://res.cloudinary.com/dvgrg8asq/image/upload/v1775609392/WhatsApp-Image-2026-04-06-at-4.06.24-PM_pq767e.jpg",
+  "https://res.cloudinary.com/dvgrg8asq/image/upload/v1775609390/WhatsApp-Image-2026-04-06-at-4.05.10-PM_kia4la.jpg",
+  "https://res.cloudinary.com/dvgrg8asq/image/upload/v1775609389/WhatsApp-Image-2026-04-06-at-4.05.09-PM_yrrtyz.jpg",
 ];
 
 export default function GrabadoPage() {

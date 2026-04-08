@@ -17,7 +17,7 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "Mayorista de Mates y Accesorios | Tienda Cuis",
   description:
-    "Venta mayorista de mates, bombillas y artículos regionales. Grabado láser personalizado. Envíos a todo el país desde La Lucila del Mar.",
+    "Mayorista de mates y artículos regionales. Especialistas en tiendas de souvenirs y emprendedores. Grabado láser personalizado. Envíos a todo el país.",
 };
 
 export default function RootLayout({
@@ -27,6 +27,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
+      <head>
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=AW-10794736685"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'AW-10794736685');
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${playfair.variable} ${dmSans.variable} font-sans antialiased`}
       >
