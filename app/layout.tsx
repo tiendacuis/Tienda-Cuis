@@ -3,6 +3,7 @@ import { Playfair_Display, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { CarritoProvider } from "./components/CarritoContext";
 import CarritoDrawer from "./components/CarritoDrawer";
+import { Analytics } from "@vercel/analytics/react";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -63,6 +64,7 @@ export default function RootLayout({
           {children}
           <CarritoDrawer />
         </CarritoProvider>
+        <Analytics />
       </body>
     </html>
   );
