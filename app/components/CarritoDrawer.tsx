@@ -235,6 +235,9 @@ export default function CarritoDrawer() {
                 >
                   Finalizar pedido por email
                 </button>
+                <button onClick={cerrar} className="w-full text-xs text-[#E8673A] hover:underline py-1">
+                  Seguir comprando →
+                </button>
                 <button onClick={vaciar} className="w-full text-xs text-[#6b6b6b] hover:text-red-500 py-1">
                   Vaciar carrito
                 </button>
