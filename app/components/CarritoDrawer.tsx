@@ -25,12 +25,12 @@ function getProximoTramo(total: number) {
 
 function dispararConversion() {
   if (typeof window !== "undefined" && typeof (window as any).gtag === "function") {
-    (window as any).gtag("event", "ads_conversion_Tramitaci_n_de_la_compr_1", {
-      event_timeout: 2000,
+    (window as any).gtag("event", "conversion", {
+      send_to: "AW-10794736685/gl9wCOXJ15gcEK24qpso",
+      transaction_id: "",
     });
   }
 }
-
 function BarraProgreso({ total }: { total: number }) {
   if (total === 0) return null;
   const llegaAlMinimo = total >= MINIMO;
