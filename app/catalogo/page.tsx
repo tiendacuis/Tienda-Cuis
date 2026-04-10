@@ -14,6 +14,7 @@ type Producto = {
   descripcion: string;
   imagen: string;
   activo: boolean;
+  destacado: boolean;
 };
 
 const categorias = [
@@ -41,7 +42,7 @@ export default function Catalogo() {
   const [orden, setOrden] = useState("default");
   const [busqueda, setBusqueda] = useState("");
   const [agregados, setAgregados] = useState<Record<string, boolean>>({});
-  const { agregar, setAbierto } = useCarrito();
+  const { agregar, setAbierto, total, cantidad } = useCarrito();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -62,6 +63,7 @@ export default function Catalogo() {
             descripcion: cols[4],
             imagen: cols[5],
             activo: cols[6]?.trim() === "TRUE",
+            destacado: cols[7]?.trim() === "TRUE",
           };
         });
         setProductos(data.filter((p) => p.activo && p.nombre));
@@ -80,6 +82,8 @@ export default function Catalogo() {
       if (orden === "precio-asc") return a.precio - b.precio;
       if (orden === "precio-desc") return b.precio - a.precio;
       if (orden === "nombre") return a.nombre.localeCompare(b.nombre);
+      if (a.destacado && !b.destacado) return -1;
+      if (!a.destacado && b.destacado) return 1;
       return 0;
     });
 
@@ -105,7 +109,7 @@ export default function Catalogo() {
             onClick={() => setAbierto(true)}
             className="bg-[#E8673A] text-white text-xs px-3 md:px-4 py-2 rounded-sm font-medium hover:bg-[#C4522C] transition-colors"
           >
-            Ver carrito
+            {cantidad > 0 ? `Carrito · $${total.toLocaleString("es-AR")}` : "Ver carrito"}
           </button>
         </div>
       </nav>
@@ -115,7 +119,7 @@ export default function Catalogo() {
         <h1 className="text-2xl md:text-3xl font-light text-[#1A1A1A] mb-1 tracking-tight">Nuestros productos</h1>
         <p className="text-sm text-[#6b6b6b] mb-6 font-light">{filtrados.length} productos disponibles</p>
 
-        {/* DESKTOP: todo en una línea */}
+        {/* DESKTOP */}
         <div className="hidden md:flex items-center gap-2 mb-8">
           <div className="flex gap-2 flex-shrink-0">
             {categorias.map((cat) => (
@@ -151,16 +155,15 @@ export default function Catalogo() {
             onChange={(e) => setOrden(e.target.value)}
             className="text-xs px-2 py-2 rounded-sm border border-[#E8E4DB] bg-white text-[#6b6b6b] focus:outline-none focus:border-[#2D2B45] cursor-pointer flex-shrink-0"
           >
-            <option value="default">Ordenar</option>
+            <option value="default">Destacados primero</option>
             <option value="precio-asc">Menor precio</option>
             <option value="precio-desc">Mayor precio</option>
             <option value="nombre">A-Z</option>
           </select>
         </div>
 
-        {/* MOBILE: categorías arriba, buscador + orden abajo */}
+        {/* MOBILE */}
         <div className="md:hidden mb-6">
-          {/* Fila 1: categorías con scroll */}
           <div className="overflow-x-auto mb-3">
             <div className="flex gap-2 pb-1 min-w-max">
               {categorias.map((cat) => (
@@ -179,7 +182,6 @@ export default function Catalogo() {
               ))}
             </div>
           </div>
-          {/* Fila 2: buscador + orden */}
           <div className="flex gap-2 items-center">
             <div className="relative flex-1">
               <input
@@ -199,7 +201,7 @@ export default function Catalogo() {
               onChange={(e) => setOrden(e.target.value)}
               className="text-xs px-2 py-2 rounded-sm border border-[#E8E4DB] bg-white text-[#6b6b6b] focus:outline-none cursor-pointer flex-shrink-0"
             >
-              <option value="default">Ordenar</option>
+              <option value="default">Destacados primero</option>
               <option value="precio-asc">Menor precio</option>
               <option value="precio-desc">Mayor precio</option>
               <option value="nombre">A-Z</option>
@@ -207,7 +209,6 @@ export default function Catalogo() {
           </div>
         </div>
 
-        {/* SIN RESULTADOS */}
         {filtrados.length === 0 && (
           <div className="text-center py-16">
             <p className="text-sm text-[#6b6b6b] font-light mb-2">No encontramos productos para "{busqueda}"</p>
@@ -217,7 +218,6 @@ export default function Catalogo() {
           </div>
         )}
 
-        {/* GRILLA */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
           {filtrados.map((producto) => (
             <a
