@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useCarrito } from "../../components/CarritoContext";
-import { Analytics } from "@vercel/analytics/next";
+
 
 const LOGO_NEGRO = "https://tiendacuis.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-06-at-6.57.16-PM.jpeg";
 
@@ -34,7 +34,7 @@ export default function ProductoPage({ params }: { params: Promise<{ slug: strin
   const [cargando, setCargando] = useState(true);
   const [cantidad, setCantidad] = useState(1);
   const [agregado, setAgregado] = useState(false);
-  const { agregar } = useCarrito();
+  const { agregar, setAbierto, total, cantidad: cantidadCarrito } = useCarrito();
 
   useEffect(() => {
     const cargar = async () => {
@@ -90,6 +90,12 @@ export default function ProductoPage({ params }: { params: Promise<{ slug: strin
         </a>
         <div className="flex items-center gap-3">
           <span className="text-xs text-[#6b6b6b] bg-[#F0EDE8] px-3 py-1 rounded-sm tracking-wide">Solo mayorista</span>
+          <button
+            onClick={() => setAbierto(true)}
+            className="bg-[#E8673A] text-white text-xs px-3 md:px-4 py-2 rounded-sm font-medium hover:bg-[#C4522C] transition-colors"
+          >
+            {cantidadCarrito > 0 ? `Carrito · $${total.toLocaleString("es-AR")}` : "Ver carrito"}
+          </button>
         </div>
       </nav>
 
