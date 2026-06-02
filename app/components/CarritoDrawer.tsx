@@ -4,6 +4,8 @@ import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import { useCarrito } from "./CarritoContext";
 
+  import { supabase } from "@/lib/supabase";
+
 type Vista = "carrito" | "formulario" | "confirmado";
 
 const MINIMO = 80000;
@@ -100,13 +102,47 @@ export default function CarritoDrawer() {
   const ahorro = total - totalConDescuento;
   const llegaAlMinimo = total >= MINIMO;
 
-  const enviarPorWhatsApp = () => {
+  const guardarPedido = async (via: "whatsapp" | "email", datosCliente?: typeof form) => {
+    try {
+      const { data: pedido, error } = await supabase
+        .from("pedidos")
+        .insert({
+          nombre_cliente: datosCliente?.nombre || "(WhatsApp)",
+          email: datosCliente?.email || "",
+          telefono: datosCliente?.telefono || "",
+          localidad: datosCliente?.localidad || "",
+          subtotal: total,
+          descuento_pct: descuento,
+          total: totalConDescuento,
+          via_contacto: via,
+        })
+        .select("id") 
+        .single();
+
+      if (error || !pedido) return;
+
+      await supabase.from("pedido_items").insert(
+        items.map((item) => ({
+          pedido_id: pedido.id,
+          producto_id: null,
+          nombre: item.nombre,
+          precio: item.precio,  
+          cantidad: item.cantidad,
+        }))
+      );
+    } catch {
+      // no interrumpir el flujo si falla
+    }
+  };
+
+  const enviarPorWhatsApp = async () => {
     if (!llegaAlMinimo || items.length === 0) return;
     const lineas = items.map((i) => `- ${i.cantidad}x ${i.nombre} — $${(i.precio * i.cantidad).toLocaleString("es-AR")}`).join("\n");
     const descuentoTexto = descuento > 0
       ? `\nDescuento aplicado (${descuento}%): -$${ahorro.toLocaleString("es-AR")}\nTotal con descuento: $${totalConDescuento.toLocaleString("es-AR")}`
       : "";
     const mensaje = `Hola! Quiero hacer un pedido mayorista:\n\n${lineas}\n\nSubtotal: $${total.toLocaleString("es-AR")}${descuentoTexto}`;
+    await guardarPedido("whatsapp");
     dispararConversion();
     window.open("https://wa.me/541123251963?text=" + encodeURIComponent(mensaje), "_blank");
   };
@@ -124,6 +160,7 @@ export default function CarritoDrawer() {
         detalle: detalle + descuentoTexto,
         total: "$" + totalConDescuento.toLocaleString("es-AR"),
       }, "hbpfSCzPkpZo0KttM");
+      await guardarPedido("email", form);
       dispararConversion();
       setVista("confirmado");
       vaciar();
